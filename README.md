@@ -1,6 +1,6 @@
 # Chat Hive
 
-Chat Hive is a real-time chat application that utilizes WebSockets to provide seamless and instant messaging. The app is designed to offer a user-friendly experience with various features including image and video sharing, profile customization, and secure authentication. Currently, the app is in development, and the team is working on integrating end-to-end encryption for messages.
+Chat Hive is a real-time chat application that utilizes WebSockets to provide seamless and instant messaging. The app is designed to offer a user-friendly experience with various features including image and video sharing, profile customization, and secure authentication.
 
 ## Table of Contents
 
@@ -10,7 +10,6 @@ Chat Hive is a real-time chat application that utilizes WebSockets to provide se
 - [Usage](#usage)
 - [Project Structure](#project-structure)
 - [Contributing](#contributing)
-- [License](#license)
 
 ## Features
 
@@ -111,7 +110,7 @@ Chat Hive is a real-time chat application that utilizes WebSockets to provide se
 
 ## Usage
 
-1. Open your browser and go to `http://localhost:3000`.
+1. Open your browser and go to `http://localhost:5173`.
 2. Register a new account or log in with an existing account.
 3. Start chatting in real-time, share images and videos, and customize your profile.
 
