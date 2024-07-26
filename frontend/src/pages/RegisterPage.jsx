@@ -83,8 +83,9 @@ const RegisterPage=()=>{
                 toast.success(res.data.message);
             }
         } catch(err){
+            setLoading(0);
             toast.error(err?.response?.data?.message);
-            console.log("error",err);
+            // console.log("error",err);
         }
     }
 

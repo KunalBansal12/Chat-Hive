@@ -13,6 +13,7 @@ import Loading from "./Loading";
 import backgroundImage from '../assets/wallapaper.jpeg'
 import {IoMdSend} from 'react-icons/io'
 import moment from 'moment'
+import toast from "react-hot-toast";
 
 const MessagePage= () =>{
     const params=useParams();
@@ -48,34 +49,45 @@ const MessagePage= () =>{
 
     const handleUploadImage=async (e)=>{
         const file=e.target.files[0];
-
-        setLoading(true)
-        const uploadPhoto=await uploadFile(file)
-        
-        setMessage(prev=>{
-            return {
-                ...prev,
-                imageUrl: uploadPhoto.url
-            }
-        })
-        setLoading(false)
+        e.target.value=null;
+        if(!file || !file.type.startsWith('image/')){
+            toast.error("Please select a valid image type")
+        }
+        else{
+            setLoading(true)
+            const uploadPhoto=await uploadFile(file)
+            
+            setMessage(prev=>{
+                return {
+                    ...prev,
+                    imageUrl: uploadPhoto.url
+                }
+            })
+            setLoading(false)
+        }
     }
 
     const handleUploadVideo=async (e)=>{
         const file=e.target.files[0];
-
-        setLoading(true)
-        const uploadVideo=await uploadFile(file)
-        console.log(uploadVideo)
-        
-        setLoading(false)
-        setOpenImageVideoUpload(false)
-        setMessage(prev=>{
-            return {
-                ...prev,
-                videoUrl: uploadVideo.url
-            }
-        })
+        e.target.value=null;
+        console.log("file",e.target.files)
+        if(!file || !file.type.startsWith('video/')){
+            toast.error("Please select a valid video type")
+        }
+        else{
+            setLoading(true)
+            const uploadVideo=await uploadFile(file)
+            console.log(uploadVideo)
+            
+            setLoading(false)
+            setOpenImageVideoUpload(false)
+            setMessage(prev=>{
+                return {
+                    ...prev,
+                    videoUrl: uploadVideo.url
+                }
+            })
+        }
     }
 
     const handleClearUploadImage=()=>{
@@ -291,12 +303,14 @@ const MessagePage= () =>{
 
                                 <input
                                     type="file"
+                                    accept=".jpg,.jpeg,.png"
                                     id="uploadImage"
                                     onChange={handleUploadImage}
                                     className="hidden"
                                 />
                                 <input
                                     type="file"
+                                    accept=".mp4,.avi,.3gp,.wmv,.mov,.mkv,.webm"
                                     id="uploadVideo"
                                     onChange={handleUploadVideo}
                                     className="hidden"

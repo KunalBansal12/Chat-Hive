@@ -59,7 +59,7 @@ const SearchUser=({onClose})=>{
 
                 {
                     loading && (
-                        <p><Loading/></p>
+                        <Loading/>
                     )
                 }
 

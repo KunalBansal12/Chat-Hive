@@ -1,16 +1,30 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import Avatar from "../components/Avatar";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import axios from "axios";
+import Loading from "../components/Loading";
 
 const ForgotPassword=()=>{
     const [data,setData]=useState({
         password: ""
     })
+    const [verify,setVerify]=useState(0);
+    const [loading,setLoading]=useState(0);
+    const [otp,setOtp]=useState(0);
     const location=useLocation();
     const {state}=location;
     const navigate=useNavigate();
+
+    useEffect(()=>{
+        if(!state?.name){
+            navigate('/email')
+        }
+    },[])
+
+    useEffect(()=>{
+        
+    })
 
     const handleOnChange=(e)=>{
         const {name, value}=e.target;
@@ -24,6 +38,60 @@ const ForgotPassword=()=>{
     }
 
     console.log(location)
+
+    const verifyEmail=async(e)=>{
+        e.preventDefault();
+        e.stopPropagation();
+        
+        const URL=`${process.env.REACT_APP_BACKEND_URL}/api/send_otp`;
+
+        try{
+            setLoading(1);
+            const res=await axios({
+                method:'post',
+                url:URL,
+                data : {
+                    email: state?.email
+                    }
+                }
+            );
+            if(res.data.success){
+                setVerify(1);
+                setLoading(0);
+                toast.success(res.data.message);
+            }
+        } catch(err){
+            setLoading(0);
+            toast.error(err?.response?.data?.message);
+            // console.log("error",err);
+        }
+    }
+
+    const verifyOtp=async(e)=>{
+        e.preventDefault();
+        e.stopPropagation();
+
+        const URL=`${process.env.REACT_APP_BACKEND_URL}/api/verify_otp`;
+
+        try{
+            const res=await axios({
+                method:'post',
+                url:URL,
+                data : {
+                    email: state?.email,
+                    otp: otp
+                    }
+                }
+            );
+            if(res.data.success){
+                toast.success(res.data.message);
+                setVerify(2);
+            }
+        } catch(err){
+            toast.error(err?.response?.data?.message);
+            console.log("error",err);
+        }
+    }
 
     const handleSubmit=async (e)=>{
         e.preventDefault();
@@ -72,25 +140,65 @@ const ForgotPassword=()=>{
 
             <form className="grid gap-4 mt-3" onSubmit={handleSubmit}>
 
-                <div className="flex flex-col gap-1">
-                    <label htmlFor="password">New Password :</label>
-                    <input
-                        type='password'
-                        id= 'password'
-                        name= 'password'
-                        placeholder="Enter new password"
-                        className="bg-slate-100 px-2 py-1 focus:outline-primary"
-                        value={data.password}
-                        onChange={handleOnChange}
-                        required
-                    />
-                </div>
+                {
+                    loading==1 && <Loading/>
+                }
+                {
+                    loading==0 && verify==0 && (
+                        <div className="flex flex-col gap-1">
+                            Email: 
+                            {" "+state?.email}
+                            <p className="text-primary hover:text-secondary rounded px-2 w-auto self-start cursor-pointer" onClick={verifyEmail}>Verify!</p>
+                        </div>
+                    )
+                }
 
-                <button
-                  className="bg-primary text-lg px-4 py-1 hover:bg-secondary rounded mt-2 font-bold text-white leading-relaxed tracking-wide"
-                >
-                    Submit
-                </button>
+                {
+                    verify==1 && (
+                        <div className="flex flex-col gap-1">
+                        <label htmlFor="otp">Otp :</label>
+                        <input
+                            type='text'
+                            id= 'otp'
+                            name= 'otp'
+                            placeholder="Enter otp"
+                            className="bg-slate-100 px-2 py-1 focus:outline-primary"
+                            onChange={e=>setOtp(e.target.value)}
+                            required
+                        />
+                        {
+                            otp!=0 && (
+                                <button className="text-primary hover:text-secondary rounded px-2 w-auto self-start" onClick={verifyOtp}>Verify!</button>
+                            )
+                        }
+                        </div>
+                    )
+                }
+
+                {
+                    verify==2 && (
+                        <>
+                            <div className="flex flex-col gap-1">
+                                <label htmlFor="password">New Password :</label>
+                                <input
+                                    type='password'
+                                    id= 'password'
+                                    name= 'password'
+                                    placeholder="Enter new password"
+                                    className="bg-slate-100 px-2 py-1 focus:outline-primary"
+                                    value={data.password}
+                                    onChange={handleOnChange}
+                                    required
+                                />
+                            </div>
+                            <button
+                              className="bg-primary text-lg px-4 py-1 hover:bg-secondary rounded mt-2 font-bold text-white leading-relaxed tracking-wide"
+                            >
+                                Submit
+                            </button>
+                        </>
+                    )
+                }
 
             </form>
         </div>

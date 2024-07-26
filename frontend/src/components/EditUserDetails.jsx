@@ -28,14 +28,19 @@ const EditUserDetails=({onClose,user})=>{
 
     const handleUploadPhoto=async (e)=>{
         const file=e.target.files[0];
-
-        const uploadPhoto=await uploadFile(file)
-        setData((prev)=>{
-            return{
-                ...prev,
-                profile_pic: uploadPhoto?.url
-            }
-        })
+        
+        if(!file || !file.type.startsWith('image/')){
+            toast.error("Please select a valid image type")
+        }
+        else{
+            const uploadPhoto=await uploadFile(file)
+            setData((prev)=>{
+                return{
+                    ...prev,
+                    profile_pic: uploadPhoto?.url
+                }
+            })
+        }
     }
 
     const handleSubmit=async (e)=>{
@@ -96,6 +101,7 @@ const EditUserDetails=({onClose,user})=>{
                              <button className="font-semibold" onClick={handleOpenUploadPhoto}>Change photo</button>
                              <input
                                 type='file'
+                                accept=".jpg,.jpeg,.png"
                                 id="profile_pic"
                                 className="hidden"
                                 onChange={handleUploadPhoto}
@@ -107,8 +113,8 @@ const EditUserDetails=({onClose,user})=>{
 
                     <Divider/>
                     <div className="flex gap-2 w-fit ml-auto">
-                        <button onClick={onClose} className="border-primary border text-primary px-4 py-1 rounded hover:bg-primary hover:text-white">Cancel</button>
-                        <button onClick={handleSubmit} className="border-primary bg-primary text-white border px-4 py-1 rounded hover:bg-secondary">Save</button>
+                        <button type="button" onClick={onClose} className="border-primary border text-primary px-4 py-1 rounded hover:bg-primary hover:text-white">Cancel</button>
+                        <button className="border-primary bg-primary text-white border px-4 py-1 rounded hover:bg-secondary">Save</button>
                     </div>
                 </form>
             </div>
