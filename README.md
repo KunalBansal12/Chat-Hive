@@ -117,54 +117,56 @@ Chat Hive is a real-time chat application that utilizes WebSockets to provide se
 
 ## Project Structure
 
-Chat-Hive/
-├── backend/
-│ ├── controllers/
-│ │ ├── authController.js
-│ │ ├── chatController.js
-│ │ └── userController.js
-│ ├── models/
-│ │ ├── Message.js
-│ │ ├── User.js
-│ │ └── index.js
-│ ├── routes/
-│ │ ├── authRoutes.js
-│ │ ├── chatRoutes.js
-│ │ └── userRoutes.js
-│ ├── utils/
-│ │ ├── auth.js
-│ │ ├── db.js
-│ │ └── upload.js
-│ ├── .env
-│ ├── server.js
-│ └── ...
-├── frontend/
-│ ├── src/
-│ │ ├── components/
-│ │ │ ├── Avatar.js
-│ │ │ ├── ChatBox.js
-│ │ │ ├── Divider.js
-│ │ │ ├── Message.js
-│ │ │ ├── Navbar.js
-│ │ │ └── ...
-│ │ ├── recoil/
-│ │ │ ├── atoms.js
-│ │ │ └── selectors.js
-│ │ ├── pages/
-│ │ │ ├── ChatPage.js
-│ │ │ ├── HomePage.js
-│ │ │ ├── LoginPage.js
-│ │ │ ├── ProfilePage.js
-│ │ │ └── RegisterPage.js
-│ │ ├── App.js
-│ │ ├── index.js
-│ │ └── ...
-│ ├── public/
-│ │ ├── index.html
-│ │ └── ...
-│ └── ...
-├── README.md
-└── ...
+    ```sh
+    Chat-Hive/
+    ├── backend/
+    │ ├── controllers/
+    │ │ ├── authController.js
+    │ │ ├── chatController.js
+    │ │ └── userController.js
+    │ ├── models/
+    │ │ ├── Message.js
+    │ │ ├── User.js
+    │ │ └── index.js
+    │ ├── routes/
+    │ │ ├── authRoutes.js
+    │ │ ├── chatRoutes.js
+    │ │ └── userRoutes.js
+    │ ├── utils/
+    │ │ ├── auth.js
+    │ │ ├── db.js
+    │ │ └── upload.js
+    │ ├── .env
+    │ ├── server.js
+    │ └── ...
+    ├── frontend/
+    │ ├── src/
+    │ │ ├── components/
+    │ │ │ ├── Avatar.js
+    │ │ │ ├── ChatBox.js
+    │ │ │ ├── Divider.js
+    │ │ │ ├── Message.js
+    │ │ │ ├── Navbar.js
+    │ │ │ └── ...
+    │ │ ├── recoil/
+    │ │ │ ├── atoms.js
+    │ │ │ └── selectors.js
+    │ │ ├── pages/
+    │ │ │ ├── ChatPage.js
+    │ │ │ ├── HomePage.js
+    │ │ │ ├── LoginPage.js
+    │ │ │ ├── ProfilePage.js
+    │ │ │ └── RegisterPage.js
+    │ │ ├── App.js
+    │ │ ├── index.js
+    │ │ └── ...
+    │ ├── public/
+    │ │ ├── index.html
+    │ │ └── ...
+    │ └── ...
+    ├── README.md
+    └── ...
+    ```
 
 
 ## Contributing
