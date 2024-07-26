@@ -117,7 +117,6 @@ Chat Hive is a real-time chat application that utilizes WebSockets to provide se
 
 ## Project Structure
 
-    ```sh
     Chat-Hive/
     ├── backend/
     │ ├── controllers/
@@ -166,7 +165,6 @@ Chat Hive is a real-time chat application that utilizes WebSockets to provide se
     │ └── ...
     ├── README.md
     └── ...
-    ```
 
 
 ## Contributing
