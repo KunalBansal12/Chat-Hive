@@ -6,6 +6,15 @@ async function UserDetails(req,res){
 
         const user=await getUserDetailFromToken(token);
 
+        if (user?.logout) {
+            return res.status(401).json({
+                message: "Session out",
+                data: {
+                    logout: true
+                }
+            });
+        }
+
         return res.status(200).json({
             message: "User details",
             data: user

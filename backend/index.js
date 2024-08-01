@@ -17,11 +17,11 @@ app.use(cookieParser());
 
 const PORT=process.env.PORT || 8080
 
-app.get('/',(req,res)=>{
-    res.json({
-        message: "Server running at "+PORT
-    })
-})
+// app.get('/',(req,res)=>{
+//     res.json({
+//         message: "Server running at "+PORT
+//     })
+// })
 
 app.use('/api',router);
 

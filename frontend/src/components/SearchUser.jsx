@@ -19,11 +19,11 @@ const SearchUser=({onClose})=>{
                 search: search
             })
             setLoading(false)
-
             setSearchUser(res.data.data)
 
         } catch(err){
             toast.error(err?.res?.data?.message)
+            setLoading(false);
         }
     }
 
@@ -35,7 +35,7 @@ const SearchUser=({onClose})=>{
 
     return <div className="fixed top-0 bottom-0 left-0 right-0 bg-slate-700 bg-opacity-40 p-2 z-10">
         <div className="w-full max-w-lg mx-auto mt-10">
-            <div className="bg-white rounded h-14 overflow-hidden flex">
+            <div className="bg-white rounded h-14 flex">
                 <input 
                     type='text' 
                     placeholder="Search user by name,email..."
@@ -49,7 +49,7 @@ const SearchUser=({onClose})=>{
             </div>
 
             {/* display search user */}
-            <div className="bg-white mt-2 w-full p-4 rounded">
+            <div className="bg-white mt-2 h-[calc(100vh-120px)] w-full p-4 rounded overflow-x-hidden overflow-y-auto scrollbar">
                 {/* no user found */}
                 {
                     searchUser.length===0 && !loading && (

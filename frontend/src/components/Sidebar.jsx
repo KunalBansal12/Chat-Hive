@@ -11,6 +11,8 @@ import {FiArrowUpLeft} from "react-icons/fi"
 import SearchUser from "./SearchUser"
 import { usesocket } from "../App"
 import {Logout} from "../recoil/logout"
+import toast from "react-hot-toast"
+import axios from "axios"
 
 const Sidebar=()=>{
     const userAtomValue=useRecoilValue(userAtom);
@@ -51,10 +53,22 @@ const Sidebar=()=>{
         }
     },[socketConn,userAtomValue])
 
-    const handleLogOut=()=>{
-        <Logout />
+    const handleLogOut=async ()=>{
         localStorage.clear();
+        try{
+            const URL=`${process.env.REACT_APP_BACKEND_URL}/api/logout`;
+            const res= await axios({
+                method: "get",
+                url: URL,
+                withCredentials: true
+            })
+        } catch(err){
+            // console.log(err)
+            toast.error("Error logging out")
+        }
+        <Logout/>
         navigate("/email");
+        return;
     }
 
     return (
@@ -110,7 +124,7 @@ const Sidebar=()=>{
                     {
                         allUser.map((conv,index)=>{
                             return(
-                                <NavLink to={"/"+conv?.userDetails?._id} key={conv?._id} className="flex items-center gap-2 py-3 px-2 border border-transparent hover:border-primary rounded hover:bg-slate-100 cursor-pointer">
+                                <NavLink to={"/message/"+conv?.userDetails?._id} key={conv?._id} className="flex items-center gap-2 py-3 px-2 border border-transparent hover:border-primary rounded hover:bg-slate-100 cursor-pointer">
                                     <div>
                                         <Avatar
                                             ImageURL={conv?.userDetails?.profile_pic}

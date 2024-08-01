@@ -37,28 +37,50 @@ io.on('connection',async (socket)=>{
 
     io.emit('onlineUser',Array.from(onlineUser))
 
+    // socket.on('check-user',async (userId)=>{
+    //     // console.log(userId,"bla");
+    //     // console.log(userId.length);
+    //     if(userId.length!=24){
+    //         socket.emit('check-reply',{ans: false})
+    //     }
+    //     else{
+    //         const userde=await UserModel.findById(userId);
+    //         if(userde){
+    //             socket.emit('check-reply',{ans: true});
+    //         }
+    //         else{
+    //             socket.emit('check-reply',{ans:false});
+    //         }
+    //     }
+    // })
+
     socket.on('message-page',async (userId)=>{
         console.log('userId',userId);
-        const userDetails = await UserModel.findById(userId).select("-password")
-
-        const payload={
-            _id: userDetails?._id,
-            name: userDetails?.name,
-            email: userDetails?.email,
-            profile_pic: userDetails?.profile_pic,
-            online : onlineUser.has(userId)
+        const userDetails = await UserModel.findById(userId).select("-password");
+        if(!userDetails){
+            socket.emit('check-user',{ans:false})
         }
+        else{
+            socket.emit('check-user',{ans:true});
+            const payload={
+                _id: userDetails?._id,
+                name: userDetails?.name,
+                email: userDetails?.email,
+                profile_pic: userDetails?.profile_pic,
+                online : onlineUser.has(userId)
+            }
 
-        socket.emit('message-user',payload)
+            socket.emit('message-user',payload)
 
-        // get previous message
-        const getConversationMessage = await conversationModel.findOne({
-            "$or":[
-                { sender: user?._id, reciever: userId},
-                { sender: userId, reciever:user?._id}
-            ]
-        }).populate('messages').sort({updatedAt : -1})
-        socket.emit('message',getConversationMessage || {})
+            // get previous message
+            const getConversationMessage = await conversationModel.findOne({
+                "$or":[
+                    { sender: user?._id, reciever: userId},
+                    { sender: userId, reciever:user?._id}
+                ]
+            }).populate('messages').sort({updatedAt : -1})
+            socket.emit('message',getConversationMessage || {sender: user?._id, reciever: userId,messages: []})
+        }
     })
 
 

@@ -2,7 +2,8 @@ async function logout(req,res){
     try{
         const cookieOption={
             https: true,
-            secure: true
+            secure: true,
+            expires: new Date(0)
         }
 
         return res.cookie('token','',cookieOption).status(200).json({

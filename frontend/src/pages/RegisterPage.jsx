@@ -20,7 +20,7 @@ const RegisterPage=()=>{
     const navigate=useNavigate();
     const [uploadPhoto,setUploadPhoto]=useState("");
 
-    console.log(data);
+    // console.log(data);
     const handleOnChange=(e)=>{
         const {name, value}=e.target;
         if(verify==3 && name=="email") setVerify(1);

@@ -21,7 +21,7 @@ router.get('/user-details',UserDetails)
 // logout user
 router.get('/logout',logout)
 // update user details
-router.post('/update-user',updateUserDetails)
+router.put('/update-user',updateUserDetails)
 // search user
 router.post('/search-user',searchUser)
 // send_otp
@@ -29,6 +29,6 @@ router.post('/send_otp',send_otp)
 // verify otp
 router.post('/verify_otp',verify_otp)
 // forgot password
-router.post('/new-password',newPassword)
+router.put('/new-password',newPassword)
 
 module.exports = router

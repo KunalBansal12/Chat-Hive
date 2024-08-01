@@ -12,7 +12,7 @@ const userSchema=new mongoose.Schema({
     },
     password: {
         type: String,
-        require: [true, "Provide password"]
+        required: [true, "Provide password"]
     },
     profile_pic: {
         type: String,

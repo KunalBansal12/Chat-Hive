@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import {useSetRecoilState } from "recoil";
 import { onlineAtom, tokenAtom, userAtom} from "../recoil/atoms";
@@ -8,6 +8,7 @@ import logo from "../assets/logo.png"
 import io from "socket.io-client"
 import { usesocket } from "../App";
 import { Logout } from "../recoil/logout";
+import toast from "react-hot-toast";
 
 const Home=()=>{
     const setTokenAtomValue=useSetRecoilState(tokenAtom)
@@ -16,6 +17,28 @@ const Home=()=>{
     const {setSocketConn}=usesocket();
     const navigate=useNavigate();
     const location=useLocation();
+
+    // const handleLogout = async () => {
+    //     if (isLoggingOut) return;
+
+    //     setIsLoggingOut(true);
+
+    //     try {
+    //         const URL = `${process.env.REACT_APP_BACKEND_URL}/api/logout`;
+    //         await axios({
+    //             method: "get",
+    //             url: URL,
+    //             // withCredentials: true
+    //         });
+    //     } catch (err) {
+    //         toast.error("Error logging out");
+    //     } finally {
+    //         localStorage.clear();
+    //         <Logout/>
+    //         setIsLoggingOut(false);
+    //         navigate('/email');
+    //     }
+    // };
     
     const fetchUserDetails=async()=>{
         try{
@@ -25,6 +48,17 @@ const Home=()=>{
                 withCredentials: true
             })
 
+            // if(res.data.data.logout){
+            //     handleLogout();
+            //     // toast.error("Session expired. Please log in again.");
+            // }
+
+            if(res.data.data.logout){
+                localStorage.clear();
+                <Logout />
+                navigate('/email');
+            }
+
             setUserAtomValue({
                 _id: res.data.data._id,
                 email: res.data.data.email,
@@ -32,19 +66,32 @@ const Home=()=>{
                 profile_pic: res.data.data.profile_pic,
             })
 
-            if(res.data.data.logout){
-                <Logout />
-                navigate('/email');
-            }
-
             console.log("Current user details",res)
         } catch(error){
-            console.log("error",error);
+            if (error.response && error.response.status === 401) {
+                localStorage.clear();
+                <Logout />
+                toast.error("session expired");
+                navigate('/email');
+            } 
+            else {
+                console.log("error fetching user details", error);
+            }
         }
     }
 
     useEffect(()=>{
-        fetchUserDetails()
+        const token=localStorage.getItem('token');
+        if(!token){
+            localStorage.clear();
+            navigate('/email');
+        }
+        else if(!document.cookie){
+            localStorage.clear();
+            navigate('/email');
+        }
+        else fetchUserDetails();
+        // else fetchUserDetails();
     },[])
 
     // socket connection

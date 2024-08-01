@@ -7,8 +7,8 @@ async function checkPassword(req,res){
         const {password, userId}=req.body;
 
         const user=await UserModel.findById(userId)
-        console.log(user)
-        console.log(password)
+        // console.log(user)
+        // console.log(password)
 
         bcryptjs.compare(password,user.password,function(err,data){
             if(err){
@@ -18,15 +18,17 @@ async function checkPassword(req,res){
                 })
             }
             if(data){
+                // console.log("data",data);
                 const tokenData={
                         id: user._id,
                         email: user.email
                     }
-                    const token=jwt.sign(tokenData,process.env.JWT_SECRET_KEY,{expiresIn: '1d'});
+                    const token=jwt.sign(tokenData,process.env.JWT_SECRET_KEY,{expiresIn: '15d'});
             
                     const cookieOption={
                         https: true,
-                        secure: true
+                        secure: true,
+                        expires: new Date(Date.now()+15*24*60*60*1000)
                     }
             
                     return res.cookie('token',token,cookieOption).status(200).json({

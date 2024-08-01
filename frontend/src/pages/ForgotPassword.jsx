@@ -102,7 +102,7 @@ const ForgotPassword=()=>{
 
         try{
             const res=await axios({
-                method: "post",
+                method: "put",
                 url: URL,
                 data : {
                     userId: state?._id,

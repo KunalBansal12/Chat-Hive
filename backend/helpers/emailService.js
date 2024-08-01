@@ -14,7 +14,7 @@ async function sendOTPEmail(email, otp) {
       from: 'Chat Hive <chathiveotp@gmail.com>',
       to: `<${email}>`,
       subject: 'Your OTP Code',
-      text: `Your OTP code is ${otp}`,
+      text: `Your OTP code is ${otp}. Please do not share OTP with anyone.`,
     });
     console.log(info.response)  
   } catch(err){

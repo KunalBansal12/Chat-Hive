@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { usesocket } from "../App";
 import Avatar from "./Avatar";
 import { useRecoilValue } from "recoil";
@@ -18,6 +18,19 @@ import toast from "react-hot-toast";
 const MessagePage= () =>{
     const params=useParams();
     const {socketConn}=usesocket();
+    const navigate=useNavigate();
+    // useEffect(()=>{
+    //     if(socketConn){
+    //         console.log("param",params.userId);
+    //         socketConn.emit('check-user',params.userId);
+
+    //         socketConn.on('check-reply',(data)=>{
+    //             if(!data.ans){
+    //                 navigate('/')
+    //             }
+    //         })
+    //     }
+    // },[socketConn,params?.userId])
     const userValue=useRecoilValue(userAtom);
     const [dataUser,setDataUser]=useState({
         name: "",
@@ -142,19 +155,26 @@ const MessagePage= () =>{
     console.log("socketConn",socketConn)
     useEffect(()=>{
         if(socketConn){
+            if(params.userId.length!=24) navigate('/');
+
             socketConn.emit('message-page',params.userId)
-
-            socketConn.emit('seen',params.userId)
-
-            socketConn.on('message-user',(data)=>{
-                console.log("user-data",data)
-                setDataUser(data)
+            let ans1=true;
+            socketConn.on('check-user',(data)=>{
+                if(data.ans==false) ans1=false;
             })
+            if(ans1){
+                socketConn.emit('seen',params.userId)
 
-            socketConn.on('message',(data)=>{
-                if(data?.sender==userValue._id && data?.reciever==params.userId) setAllMessage(data?.messages)
-                else if(data?.reciever==userValue._id && data?.sender==params.userId) setAllMessage(data?.messages)
-            })
+                socketConn.on('message-user',(data)=>{
+                    console.log("user-data",data)
+                    setDataUser(data)
+                })
+                    
+                socketConn.on('message',(data)=>{
+                    if(data?.sender==userValue._id && data?.reciever==params.userId) setAllMessage(data?.messages)
+                    else if(data?.reciever==userValue._id && data?.sender==params.userId) setAllMessage(data?.messages)
+                })
+            }
         }
     },[socketConn,params?.userId,userValue])
 

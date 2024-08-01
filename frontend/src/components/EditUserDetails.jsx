@@ -47,7 +47,7 @@ const EditUserDetails=({onClose,user})=>{
         try{
             const URL=`${process.env.REACT_APP_BACKEND_URL}/api/update-user`;
             const res=await axios({
-                method:'post',
+                method:'put',
                 url: URL,
                 data: data,
                 withCredentials:true

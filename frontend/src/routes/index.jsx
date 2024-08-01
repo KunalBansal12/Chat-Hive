@@ -7,6 +7,7 @@ import MessagePage from '../components/MessagePage'
 import RegisterPage from '../pages/RegisterPage'
 import AuthLayout from '../layout'
 import ForgotPassword from '../pages/ForgotPassword'
+import ErrorPage from '../pages/ErrorPage'
 
 const router = createBrowserRouter([
     {
@@ -33,10 +34,13 @@ const router = createBrowserRouter([
                 element: <Home/>,
                 children : [
                     {
-                        path: ":userId",
+                        path: "message/:userId",
                         element : <MessagePage />
                     }
                 ]
+            },{
+                path: "*",
+                element: <AuthLayout><ErrorPage/></AuthLayout>
             }
         ]
     }
