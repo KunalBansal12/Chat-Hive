@@ -3,7 +3,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { usesocket } from "../App";
 import Avatar from "./Avatar";
 import { useRecoilValue } from "recoil";
-import { userAtom } from "../recoil/atoms";
+import { onlineAtom, userAtom } from "../recoil/atoms";
 import {HiDotsVertical} from "react-icons/hi"
 import { FaAngleLeft } from "react-icons/fa";
 import { FaPlus, FaImage, FaVideo } from "react-icons/fa";
@@ -51,9 +51,12 @@ const MessagePage= () =>{
     const currentMessage=useRef(null);
 
     useEffect(()=>{
-        if(currentMessage.current){
-            currentMessage.current.scrollIntoView({behavior: "smooth", block : "end"})
-        }
+        setTimeout(()=>{
+            if(currentMessage.current){
+                currentMessage.current.scrollIntoView({behavior: "smooth", block : "end"})
+            }
+            console.log("timeout")
+        },500)
     },[allMessage])
 
     const handleUploadImageVideoOpen=()=>{
@@ -162,6 +165,11 @@ const MessagePage= () =>{
             socketConn.on('check-user',(data)=>{
                 if(data.ans==false) ans1=false;
             })
+            if(!ans1){
+                socketConn.off('check-user');
+                navigate('/');
+                return;
+            }
             if(ans1){
                 socketConn.emit('seen',params.userId)
 
@@ -170,13 +178,24 @@ const MessagePage= () =>{
                     setDataUser(data)
                 })
                     
-                socketConn.on('message',(data)=>{
-                    if(data?.sender==userValue._id && data?.reciever==params.userId) setAllMessage(data?.messages)
-                    else if(data?.reciever==userValue._id && data?.sender==params.userId) setAllMessage(data?.messages)
-                })
+                socketConn.on('message', (data) => {
+                    if ((data.sender === userValue._id && data.reciever === params.userId) ||
+                        (data.reciever === userValue._id && data.sender === params.userId)) {
+                        setAllMessage(data.messages);
+                        socketConn.emit('seen',params.userId);
+                    }
+                });   
+                
+                return () => {
+                    if (socketConn) {
+                        socketConn.off('check-user');
+                        socketConn.off('message-user');
+                        socketConn.off('message');
+                    }
+                };
             }
         }
-    },[socketConn,params?.userId,userValue])
+    },[socketConn,params?.userId,userValue,navigate])
 
     return <div style={{backgroundImage: `url(${backgroundImage})`}} className="bg-no-repeat bg-cover">
         <header className="sticky top-0 h-16 bg-white flex justify-between items-center px-4">
@@ -195,19 +214,15 @@ const MessagePage= () =>{
                 </div>
                 <div>
                     <h3 className="font-semibold text-lg my-0 text-ellipses line-clamp-1">{dataUser?.name}</h3>
-                    <p className="-my-2 text-sm">
-                        {
-                            dataUser.online ? <span className="text-primary">online</span> : <span className="text-slate-400">offline</span>
-                        }
-                    </p>
+                    <CheckStatus userid={dataUser._id} />
                 </div>
             </div>
 
-            <div>
+            {/* <div>
                 <button className="cursor-pointer hover:text-primary">
                     <HiDotsVertical/>
                 </button>
-            </div>
+            </div> */}
         </header>
 
         {/* show all messages */}
@@ -356,6 +371,16 @@ const MessagePage= () =>{
             </form>
         </section>
     </div>
+}
+
+const CheckStatus=({userid})=>{
+    const onlineUser=useRecoilValue(onlineAtom);
+    const isOnline = onlineUser.includes(userid);
+    return <p className="-my-2 text-sm">
+        {
+            isOnline ? <span className="text-primary">online</span> : <span className="text-slate-400">offline</span>
+        }
+    </p>
 }
 
 export default MessagePage;

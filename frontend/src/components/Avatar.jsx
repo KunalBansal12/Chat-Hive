@@ -4,7 +4,7 @@ import { onlineAtom } from "../recoil/atoms";
 import { memo } from "react";
 
 const Avatar=memo(({userId,name,ImageURL,width,height})=>{
-    const onlineUser=useRecoilValue(onlineAtom);
+    // const onlineUser=useRecoilValue(onlineAtom);
 
     let avatarName=""
 
@@ -32,7 +32,7 @@ const Avatar=memo(({userId,name,ImageURL,width,height})=>{
 
     const randomnum=Math.floor(Math.random()*9);
 
-    const isOnline = onlineUser.includes(userId)
+    // const isOnline = onlineUser.includes(userId)
 
     return <div className={`text-slate-800 rounded-full font-bold relative`} style={{width: width+"px", height: height+"px"}}>
         {
@@ -55,10 +55,21 @@ const Avatar=memo(({userId,name,ImageURL,width,height})=>{
             )
         }
 
-        {isOnline && (
+        {/* {isOnline && (
             <div className="bg-green-600 p-1 absolute bottom-2 -right-1 z-10 rounded-full"></div>
-        )}
+        )} */}
+        <CheckStatus userid={userId} />
     </div>
 })
+
+const CheckStatus=({userid})=>{
+    const onlineUser=useRecoilValue(onlineAtom);
+    const isOnline = onlineUser.includes(userid);
+    return <>
+        {
+            isOnline ? <div className="bg-green-600 p-1 absolute bottom-2 -right-1 z-10 rounded-full"></div> : <></>
+        }
+    </>
+}
 
 export default Avatar;

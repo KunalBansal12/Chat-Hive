@@ -11,7 +11,7 @@ import { Logout } from "../recoil/logout";
 import toast from "react-hot-toast";
 
 const Home=()=>{
-    const setTokenAtomValue=useSetRecoilState(tokenAtom)
+    // const setTokenAtomValue=useSetRecoilState(tokenAtom)
     const setUserAtomValue=useSetRecoilState(userAtom)
     const setOnlineAtom=useSetRecoilState(onlineAtom)
     const {setSocketConn}=usesocket();

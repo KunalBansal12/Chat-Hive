@@ -52,6 +52,7 @@ const Sidebar=()=>{
             })
         }
     },[socketConn,userAtomValue])
+    // console.log("alluser",allUser);
 
     const handleLogOut=async ()=>{
         localStorage.clear();
