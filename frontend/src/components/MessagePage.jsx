@@ -55,7 +55,7 @@ const MessagePage= () =>{
             if(currentMessage.current){
                 currentMessage.current.scrollIntoView({behavior: "smooth", block : "end"})
             }
-            console.log("timeout")
+            // console.log("timeout")
         },500)
     },[allMessage])
 
@@ -86,14 +86,14 @@ const MessagePage= () =>{
     const handleUploadVideo=async (e)=>{
         const file=e.target.files[0];
         e.target.value=null;
-        console.log("file",e.target.files)
+        // console.log("file",e.target.files)
         if(!file || !file.type.startsWith('video/')){
             toast.error("Please select a valid video type")
         }
         else{
             setLoading(true)
             const uploadVideo=await uploadFile(file)
-            console.log(uploadVideo)
+            // console.log(uploadVideo)
             
             setLoading(false)
             setOpenImageVideoUpload(false)
@@ -174,7 +174,7 @@ const MessagePage= () =>{
                 socketConn.emit('seen',params.userId)
 
                 socketConn.on('message-user',(data)=>{
-                    console.log("user-data",data)
+                    // console.log("user-data",data)
                     setDataUser(data)
                 })
                     

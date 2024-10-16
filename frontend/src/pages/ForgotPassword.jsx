@@ -37,7 +37,7 @@ const ForgotPassword=()=>{
         })
     }
 
-    console.log(location)
+    // console.log(location)
 
     const verifyEmail=async(e)=>{
         e.preventDefault();
@@ -63,7 +63,7 @@ const ForgotPassword=()=>{
         } catch(err){
             setLoading(0);
             toast.error(err?.response?.data?.message);
-            // console.log("error",err);
+            console.log("error",err);
         }
     }
 

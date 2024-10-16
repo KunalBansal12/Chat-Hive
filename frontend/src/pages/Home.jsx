@@ -66,7 +66,7 @@ const Home=()=>{
                 profile_pic: res.data.data.profile_pic,
             })
 
-            console.log("Current user details",res)
+            // console.log("Current user details",res)
         } catch(error){
             if (error.response && error.response.status === 401) {
                 localStorage.clear();
@@ -103,11 +103,11 @@ const Home=()=>{
         })
 
         socketConnection.on('onlineUser',(data)=>{
-            console.log("data",data)
+            // console.log("data",data)
             setOnlineAtom(data)
         })
 
-        console.log(socketConnection)
+        // console.log(socketConnection)
         setSocketConn(socketConnection)
 
         return ()=>{

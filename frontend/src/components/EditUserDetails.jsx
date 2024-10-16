@@ -52,7 +52,7 @@ const EditUserDetails=({onClose,user})=>{
                 data: data,
                 withCredentials:true
             })
-            console.log(res)
+            // console.log(res)
             toast.success(res.data.message)
             if(res.data.success){
                 setuserAtomValue({...userAtomValue, name:data.name, profile_pic:data.profile_pic})

@@ -16,7 +16,7 @@ async function sendOTPEmail(email, otp) {
       subject: 'Your OTP Code',
       text: `Your OTP code is ${otp}. Please do not share OTP with anyone.`,
     });
-    console.log(info.response)  
+    // console.log(info.response)  
   } catch(err){
     console.log("Error sending mails",err)
   }
